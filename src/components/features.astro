@@ -1,0 +1,75 @@
+---
+import ContentSection from "~/components/content-section.astro";
+---
+
+<ContentSection title="Mines Bot" id="features">
+  <Fragment slot="lead">
+    O <span class="text-primary">MELHOR</span> e mais assertivo Bot
+    <br>
+      <br>
+      Até 3 tentativas 💣💣💣
+    <br>
+  </Fragment>
+  <div class="mines-wrapper">
+    { Array(25).fill('hello').map((_, idx) => {
+      return (<div id={idx + 1} class="interrogation"></div>)
+    }) }
+  </div>
+    <div class="flex gap-10">
+        <button id="generate-button" class="generate-button">Gerar</button>
+        <a href="https://betbr.net/c-pYJv1IDj?lang=pt" target="_blank">
+            <button id="subscribe-button" class="generate-button">Cadastre-se</button>
+        </a>
+    </div>
+    <Fragment>
+        <span class="text-red-400">O hack só funciona para o site recomendado*</span>
+    </Fragment>
+</ContentSection>
+
+<script>
+  let available = true;
+
+  function generate(count, min, max) {
+    const randomNumbers = [];
+
+    for (let i = 0; i < count; i++) {
+      const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+      randomNumbers.push(randomNumber);
+    }
+
+    return randomNumbers;
+  }
+
+  const generateButton = document.getElementById('generate-button');
+
+  function generateDiamonds() {
+    if (! available) {
+      return;
+    }
+
+    const els = document.querySelectorAll('.diamond');
+
+    els.forEach((el) => el.classList.remove('diamond'))
+
+    const randomNumber = generate(3, 1, 25);
+
+    randomNumber.forEach((mine) => {
+      const el = document.getElementById(mine);
+
+      el.classList.add('diamond');
+    })
+
+    available = false;
+    generateButton.classList.add('disabled');
+
+    setTimeout(() => {
+      available = true;
+      generateButton.classList.remove('disabled');
+    }, 1000 * 60 * 7)
+  }
+
+  generateButton.addEventListener('click', () => {
+    generateDiamonds();
+  });
+</script>
+
