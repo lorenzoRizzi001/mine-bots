@@ -27,7 +27,11 @@ import ContentSection from "~/components/content-section.astro";
 </ContentSection>
 
 <script>
-  let available = true;
+  window.onload = () => {
+    if (! isAvailable()) {
+      generateButton.classList.add('disabled');
+    }
+  }
 
   function generate(count, min, max) {
     const randomNumbers = [];
@@ -40,10 +44,19 @@ import ContentSection from "~/components/content-section.astro";
     return randomNumbers;
   }
 
+  function setAvailable(available = true) {
+    localStorage.setItem('status', available ? 'available' : 'disabled');
+  }
+
+  function isAvailable(): boolean
+  {
+    return localStorage.getItem('status') !== 'disabled';
+  }
+
   const generateButton = document.getElementById('generate-button');
 
   function generateDiamonds() {
-    if (! available) {
+    if (! isAvailable()) {
       return;
     }
 
@@ -59,13 +72,13 @@ import ContentSection from "~/components/content-section.astro";
       el.classList.add('diamond');
     })
 
-    available = false;
+    setAvailable(false)
     generateButton.classList.add('disabled');
 
     setTimeout(() => {
-      available = true;
+      setAvailable(true)
       generateButton.classList.remove('disabled');
-    }, 1000 * 60 * 7)
+    }, 1000 * 7)
   }
 
   generateButton.addEventListener('click', () => {
