@@ -17,7 +17,7 @@ import ContentSection from "~/components/content-section.astro";
   </div>
     <div class="flex gap-10">
         <button id="generate-button" class="generate-button">Gerar</button>
-        <a href="https://betbr.net/c-pYJv1IDj?lang=pt" target="_blank">
+        <a href="https://55myy.com/?id=21350632" target="_blank">
             <button id="subscribe-button" class="generate-button">Cadastre-se</button>
         </a>
     </div>
@@ -27,62 +27,29 @@ import ContentSection from "~/components/content-section.astro";
 </ContentSection>
 
 <script>
-  window.onload = () => {
-    if (! isAvailable()) {
-      generateButton.classList.add('disabled');
-    }
-  }
+  import { generate } from '../utils';
 
-  function generate(count, min, max) {
-    const randomNumbers = [];
-
-    for (let i = 0; i < count; i++) {
-      const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
-      randomNumbers.push(randomNumber);
-    }
-
-    return randomNumbers;
-  }
-
-  function setAvailable(available = true) {
-    localStorage.setItem('status', available ? 'available' : 'disabled');
-  }
-
-  function isAvailable(): boolean
-  {
-    return localStorage.getItem('status') !== 'disabled';
-  }
+  let canGenerate = true;
 
   const generateButton = document.getElementById('generate-button');
 
-  function generateDiamonds() {
-    if (! isAvailable()) {
-      return;
-    }
+  const getDiamonds = () => document.querySelectorAll('.diamond');
 
-    const els = document.querySelectorAll('.diamond');
-
-    els.forEach((el) => el.classList.remove('diamond'))
-
-    const randomNumber = generate(3, 1, 25);
-
-    randomNumber.forEach((mine) => {
-      const el = document.getElementById(mine);
-
-      el.classList.add('diamond');
-    })
-
-    setAvailable(false)
-    generateButton.classList.add('disabled');
-
-    setTimeout(() => {
-      setAvailable(true)
-      generateButton.classList.remove('disabled');
-    }, 1000 * 7)
+  const restartBoard = () => {
+     getDiamonds().forEach((el: HTMLDivElement) => el.classList.remove('diamond'));
   }
 
-  generateButton.addEventListener('click', () => {
-    generateDiamonds();
-  });
+  function generateDiamonds() {
+    restartBoard();
+
+    generate()
+      .forEach((num) => document.getElementById(num).classList.add('diamond'));
+
+    generateButton.classList.add('disabled')
+
+    setTimeout(() => generateButton.classList.remove('disabled'), 3000);
+  }
+
+  generateButton.addEventListener('click', generateDiamonds);
 </script>
 
